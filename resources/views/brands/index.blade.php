@@ -66,7 +66,43 @@
         </div>
 
         <div class="col-md-4">
-                
+                <div class="card">
+                        <div class="card-header text-center">
+                            Add Brand
+                        </div>
+                        @if ($errors->any())
+                            <div class="alert alert-danger fade show">
+                                {{ $errors->first() }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="width: 5px; height: 5px; float: right;"></button>
+                            </div>
+                        @endif
+                        <div class="card-body">
+                            <form method="POST" action="{{ route('brands.store') }}">
+                                @csrf
+                                <div class="mb-3">
+                                    <label for="brand_id" class="form-label">Brand ID</label>
+                                    <input class="form-control" type="text" name="brand_id" value="" readonly>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="BrandName" class="form-label">Brand Name</label>
+                                    <input class="form-control" type="text" name="BrandName" value="{{ old('brand-name') }}">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="IsActive" class="form-label">Active</label>
+                                    <select name="IsActive" class="form-control" id="IsActive">
+                                        <option value="Yes" >Yes</option>
+                                        <option value="No" >No</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                                    {{ __('Add') }}
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
         <!-- <div class="col-sm">
             <div class="card">
                 <div class="card-header text-center">

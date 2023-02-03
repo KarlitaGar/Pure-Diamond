@@ -20,10 +20,10 @@ class BrandController extends Controller
             ->where('BrandName','like','%'.$request->search.'%')
             ->orwhere('BrandID','like','%'.$request->search.'%')
             ->orwhere('IsActive','like','%'.$request->search.'%')->paginate(5);
-            return view('home', compact('brands'));
+            return view('brands.index', compact('brands'));
         }else{
             $brands = tbl_brand::all();
-            return view('home', compact('brands'));
+            return view('brands.index', compact('brands'));
         }
     }
 
@@ -40,11 +40,11 @@ class BrandController extends Controller
             ->where('BrandName','like','%'.$request->search.'%')
             ->orwhere('BrandID','like','%'.$request->search.'%')
             ->orwhere('IsActive','like','%'.$request->search.'%')->paginate(5);
-            return view('home', compact('last_id', 'brands'));
+            return view('brands.index', compact('last_id', 'brands'));
         }else{
             $last_id = tbl_brand::max('BrandID')+1;
             $brands = tbl_brand::orderBy('BrandID', 'asc')->paginate(5);
-            return view('home', compact('last_id', 'brands'));
+            return view('brands.index', compact('last_id', 'brands'));
         }
     }
 
@@ -86,7 +86,7 @@ class BrandController extends Controller
     {
         $brands = tbl_brand::where('BrandID',$id)->first();
         $last_id = tbl_brand::max('BrandID')+1;
-        return view('brands.edit', compact('brands'));
+        return view('brands.edit', compact('brands', 'last_id'));
     }
 
     /**
@@ -105,5 +105,35 @@ class BrandController extends Controller
             return redirect()->back()->with('error', 'Brand cannot be deleted. This item is referred to by another object.');
         }
     }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $validate = $request->validate([
+            'BrandName' => 'required|unique:tbl_brands',
+            'IsActive' => 'required',
+        ],
+        [
+            'required' => 'All fields are required. Please ensure all fields are
+            completed.',
+            'unique' => 'Brand name already exists in the database.',
+        ]);
+
+        tbl_brand::where('BrandID',$id)->update([
+            'BrandName' => $request->BrandName,
+            'IsActive' => $request->IsActive,
+        ]);
+
+        request()->session()->flash('flash.banner', 'Brand has been updated.');
+
+        return redirect()->route('brands.index');
+    }
+
 
 }

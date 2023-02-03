@@ -27,8 +27,9 @@ Route::get('/', function () {
 
 Route::middleware([])->group(function () {
     Route::get('/', [BrandController::class, 'index']);
-    Route::get('/home', [BrandController::class, 'create'])->name('home');
+    Route::get('/brands', [BrandController::class, 'create'])->name('brands.create');
     Route::post('/brands', [BrandController::class, 'store'])->name('brands.store');
-    Route::get('/brands', [BrandController::class, 'edit'])->name('brands.edit');
-    Route::get('/brands', [BrandController::class, 'destroy'])->name('brands.destroy');
+    Route::get('/brands/{id}', [BrandController::class, 'edit'])->name('brands.edit');
+    Route::delete('brands/{id}', [BrandController::class, 'destroy'])->name('brands.destroy');
+    Route::put('brands/{id}', [BrandController::class, 'update'])->name('brands.update');
 });
