@@ -1,27 +1,28 @@
 @extends('layout.app')
 @section('content')
-<!-- <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
-
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    {{ __('You are logged in!') }}
-                </div>
-            </div>
-        </div>
-    </div>
-</div> -->
 
 <div class="container">
     <div class="row">
+        <div class="mb-3">
+            @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            @endif
+            @if ($errors->any())
+                <div class="alert alert-danger fade show">
+                    {{ $errors->first() }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="width: 5px; height: 5px; float: right;"></button>
+                </div>
+            @endif
+            @if(session('delete'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('delete') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            @endif
+        </div>
         <div class="col-sm" >
             <div class="card">
                 <div class="card-header text-center">
@@ -70,18 +71,18 @@
                         <div class="card-header text-center">
                             Add Brand
                         </div>
-                        @if ($errors->any())
+                        <!-- @if ($errors->any())
                             <div class="alert alert-danger fade show">
                                 {{ $errors->first() }}
                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="width: 5px; height: 5px; float: right;"></button>
                             </div>
-                        @endif
+                        @endif -->
                         <div class="card-body">
                             <form method="POST" action="{{ route('brands.store') }}">
                                 @csrf
                                 <div class="mb-3">
                                     <label for="brand_id" class="form-label">Brand ID</label>
-                                    <input class="form-control" type="text" name="brand_id" value="" readonly>
+                                    <input class="form-control" type="text" name="brand_id" value="{{ $last_id }}" readonly>
                                 </div>
                                 
                                 <div class="mb-3">

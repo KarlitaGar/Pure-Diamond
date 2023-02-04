@@ -16,14 +16,16 @@ class BrandController extends Controller
     public function index(Request $request)
     {
         if(!empty($request->search)){
+            $last_id = tbl_brand::max('BrandID')+1;
             $brands = tbl_brand::query()
             ->where('BrandName','like','%'.$request->search.'%')
             ->orwhere('BrandID','like','%'.$request->search.'%')
             ->orwhere('IsActive','like','%'.$request->search.'%')->paginate(5);
-            return view('brands.index', compact('brands'));
+            return view('brands.index', compact('last_id','brands'));
         }else{
+            $last_id = tbl_brand::max('BrandID')+1;
             $brands = tbl_brand::all();
-            return view('brands.index', compact('brands'));
+            return view('brands.index', compact('last_id','brands'));
         }
     }
 
@@ -71,9 +73,8 @@ class BrandController extends Controller
             'IsActive' => $request->IsActive
         ]);
 
-        request()->session()->flash('flash.banner', 'New brand name has been added.');
+        return redirect()->back()->with('success','New brand name has been added.');
 
-        return back();
     }
 
      /**
@@ -99,8 +100,7 @@ class BrandController extends Controller
     {
         try {
             tbl_brand::where('BrandID', $id)->forceDelete();
-            request()->session()->flash('flash.banner', 'Brand has been deleted.');
-            return back();
+            return redirect()->route('brands.create')->with('delete','Brand has been deleted.');
         } catch (\Illuminate\Database\QueryException $e) {
             return redirect()->back()->with('error', 'Brand cannot be deleted. This item is referred to by another object.');
         }
@@ -116,7 +116,7 @@ class BrandController extends Controller
     public function update(Request $request, $id)
     {
         $validate = $request->validate([
-            'BrandName' => 'required|unique:tbl_brands',
+            'BrandName' => 'required|unique:tbl_brands,BrandID,'.$id.',BrandID',
             'IsActive' => 'required',
         ],
         [
@@ -130,9 +130,8 @@ class BrandController extends Controller
             'IsActive' => $request->IsActive,
         ]);
 
-        request()->session()->flash('flash.banner', 'Brand has been updated.');
-
-        return redirect()->route('brands.index');
+        
+        return redirect()->route('brands.create')->with('success','Brand has been updated.');
     }
 
 

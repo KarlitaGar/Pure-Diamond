@@ -66,40 +66,12 @@
         </div>
 
         <div class="col-md-4">
-                
-        <!-- <div class="col-sm">
-            <div class="card">
-                <div class="card-header text-center">
-                    Add Brand
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="mb-3">
-                        <label for="fordescription" class="form-label">Description</label>
-                        <textarea class="form-control" id="description" rows="2"></textarea>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="forstatus" class="form-label">Status</label>
-                            <select name="status" class="form-control" id="status">
-                                <option value=""></option>
-                                <option value="0" {{ old('status') == '0' ? 'selected' : '' }}>Pending</option>
-                                <option value="1" {{ old('status') == '1' ? 'selected' : '' }}>Completed</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                        <label for="exampleFormControlTextarea1" class="form-label">Assignee</label>
-                        <input type="text" class="form-control" id="exampleFormControlInput1">
-                        </div>
-
-                        <div class="mb-3">
-                            <button class="btn btn-primary" type="submit">Submit</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> -->
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight text-center">
+                    <a href="{{ route('items.index') }}">
+                        {{ __('Items') }}
+                    </a>
+                </h2>
+        
         </div>
     </div>
 @endsection
