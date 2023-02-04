@@ -9,7 +9,19 @@
                 {{ session('success') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-            @endif
+        @endif
+        @if ($errors->any())
+            <div class="alert alert-danger fade show">
+                {{ $errors->first() }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="width: 5px; height: 5px; float: right;"></button>
+            </div>
+         @endif
+         @if(session('delete'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('delete') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
     </div>
     <div class="col-sm-8">
         <div class="max-w-7xl mx-auto sm:px-8 lg:px-8">
@@ -59,7 +71,7 @@
     <div class="col-md-4" style="margin-bottom: 2rem;">
         <div class="card">
                 <div class="card-header text-center">
-                            Add Item
+                    Add Item
                 </div>
                 @if ($errors->any())
                 <div class="alert alert-danger  fade show">
@@ -73,7 +85,7 @@
                         <div class="mb-3 row">
                             <div class="col-sm">
                                 <label for="ItemID" class="form-label">Item ID</label>
-                                <input class="form-control" type="text" name="ItemID" value="" readonly>
+                                <input class="form-control" type="text" name="ItemID" value="{{ $last_id }}" readonly>
                             </div>
                                     
                             <div class="col-sm">
@@ -102,7 +114,12 @@
                             <div class="col-sm">
                                 <label for="BrandID" class="form-label">Brand ID</label>
                                 <select name="BrandID" class="form-control" id="BrandID">
-                                            
+                                    <option value=""></option>
+                                         @foreach($brands as $row)
+                                        <option value="{{ $row->BrandID }}" {{ old('BrandID') == $row->BrandID ? 'selected' : '' }}>
+                                            {{ $row->BrandName }}
+                                        </option>
+                                        @endforeach
                                 </select>
                             </div>
 

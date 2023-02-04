@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use App\Models\tbl_item;
 use App\Models\tbl_brand;
 
@@ -16,13 +17,14 @@ class ItemController extends Controller
     public function index(Request $request)
     {
         if(!empty($request->search)){
+            $last_id = tbl_item::max('BrandID')+1;
             $items = tbl_item::query()
             ->where('ItemID','like','%'.$request->search.'%')
             ->orwhere('ItemName','like','%'.$request->search.'%')->get();
-            return view('items.index', compact('items'));
+            return view('items.index', compact('last_id','items'));
         }else{
             $items = tbl_item::all();
-            return view('items.index', compact('items'));
+            return view('items.index', compact('last_id','items'));
         }
     }
 
@@ -65,11 +67,12 @@ class ItemController extends Controller
             'IsActive' => 'required',
         ],
         [
-            'required' => 'All fields are required. Please ensure all fields are
-            completed.',
+            'required' => 'All fields are required. Please ensure all fields are completed.',
             'unique' => 'Inventory item name already exists in the database.',
-            'integer' => 'This field must be a whole number.',
-            'min' => 'This field must be at least 1.'
+            'MinStock.integer' => 'Minimum stock must be a whole number.',
+            'ReorderQty.integer' => 'Reorder quantity must be a whole number.',
+            'MinStock.min' => 'Minimum stock must be at least 1.',
+            'ReorderQty.min' => 'Reorder quantity must be at least 1.',
         ]);
 
         tbl_item::insert([
@@ -109,8 +112,7 @@ class ItemController extends Controller
     public function destroy($id)
     {
         tbl_item::where('ItemID',$id)->delete();
-        request()->session()->flash('flash.banner', 'Inventory has been deleted.');
-        return back();
+        return redirect()->route('items.create')->with('delete','Inventory has been deleted.');
     }
 
     /**

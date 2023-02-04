@@ -37,8 +37,8 @@ Route::middleware([])->group(function () {
 
     Route::get('/items', [ItemController::class, 'index']);
     Route::get('/items', [ItemController::class, 'create'])->name('items.create');
-    Route::post('/items', [BrandController::class, 'store'])->name('items.store');
-    Route::get('/items/{id}', [BrandController::class, 'edit'])->name('items.edit');
-    Route::delete('items/{id}', [BrandController::class, 'destroy'])->name('items.destroy');
-    Route::put('items/{id}', [BrandController::class, 'update'])->name('items.update');
+    Route::post('/items', [ItemController::class, 'store'])->name('items.store');
+    Route::get('/items/{id}', [ItemController::class, 'edit'])->name('items.edit');
+    Route::delete('items/{id}', [ItemController::class, 'destroy'])->name('items.destroy');
+    Route::put('items/{id}', [ItemController::class, 'update'])->name('items.update');
 });
