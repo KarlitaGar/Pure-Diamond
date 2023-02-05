@@ -99,8 +99,9 @@ class ItemController extends Controller
     public function edit($id)
     {
         $items = tbl_item::where('ItemID',$id)->first();
+        $last_id = tbl_brand::max('BrandID')+1;
         $brands = tbl_brand::all();
-        return view('items.edit', compact('items', 'brands'));
+        return view('items.edit', compact('last_id', 'items', 'brands'));
     }
 
     /**
@@ -111,7 +112,7 @@ class ItemController extends Controller
      */
     public function destroy($id)
     {
-        tbl_item::where('ItemID',$id)->delete();
+        tbl_item::where('ItemID',$id)->forceDelete();
         return redirect()->route('items.create')->with('delete','Inventory has been deleted.');
     }
 
@@ -124,22 +125,22 @@ class ItemController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // $validate = $request->validate([
-        //     'ItemName' => 'required|unique:tbl_items',
-        //     'ItemPrice' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
-        //     'ItemUOM' => 'required',
-        //     'BrandID' => 'required',
-        //     'MinStock' => 'required|numeric|min:1|integer',
-        //     'ReorderQty' => 'required|numeric|min:1|integer',
-        //     'IsActive' => 'required',
-        // ],
-        // [
-        //     'required' => 'All fields are required. Please ensure all fields are
-        //     completed.',
-        //     'unique' => 'Inventory item name already exists in the database.',
-        //     'integer' => 'This field must be a whole number.',
-        //     'min' => 'This field must be at least 1.'
-        // ]);
+        $validate = $request->validate([
+            'ItemName' => 'required|unique:tbl_items',
+            'ItemPrice' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
+            'ItemUOM' => 'required',
+            'BrandID' => 'required',
+            'MinStock' => 'required|numeric|min:1|integer',
+            'ReorderQty' => 'required|numeric|min:1|integer',
+            'IsActive' => 'required',
+        ],
+        [
+            'required' => 'All fields are required. Please ensure all fields are
+            completed.',
+            'unique' => 'Inventory item name already exists in the database.',
+            'integer' => 'This field must be a whole number.',
+            'min' => 'This field must be at least 1.'
+        ]);
 
         tbl_item::where('ItemID',$id)->update([
             'ItemName' => $request->ItemName,
@@ -153,8 +154,7 @@ class ItemController extends Controller
             'updated_at' => Carbon::now(),
         ]);
 
-        request()->session()->flash('flash.banner', 'Inventory item has been updated.');
-
-        return redirect('items');
+        return redirect()->route('items.create')->with('update','Inventory has been updated.');
     }
+    
 }

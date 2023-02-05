@@ -22,15 +22,31 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             @endif
+            <div class="row">
+                <div class="col-md-6">
+                    <a class="btn btn-outline-primary" href="{{ route('home') }}" style="margin: 2rem;"> Home </a>
+                </div>
+                <div class="col-md-6">
+                    <a class="btn btn-outline-primary" href="{{ route('items.create') }}" style="margin: 2rem; float: right;"> Inventory Items </a>
+                </div>
+            </div>
         </div>
+
         <div class="col-sm" >
             <div class="card">
                 <div class="card-header text-center">
                     <h4>Brands</h4>
                 </div>
-                
+                <div class="container" style="width: 100%; padding: 10px;">
+                    <div class="text-right">
+                        <form action="{{ route('brands.create') }}" method="GET">
+                            <button type="submit" class='btn btn-primary' style="float: right;">Search</button>
+                            <input type="text" name="search" class="form-control" style="float: right; width: 13rem; margin-right: 7px;"/>
+                        </form>
+                    </div>
+                </div>
                 <div class="card-body">
-                    <table class="table table-striped table-hover">
+                    <table class="table table-striped table-hover table-bordered">
                         <thead>
                             <tr>
                                 <th scope="col">Brand ID</th>

@@ -3,7 +3,7 @@
 
 <div class="container-fluid" >
     <div class="row">
-    <div lass="mb-3">
+    <div class="mb-3">
         @if(session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ session('success') }}
@@ -17,17 +17,43 @@
             </div>
          @endif
          @if(session('delete'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <div class="alert alert-danger fade show" role="alert">
                 {{ session('delete') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
+        @if(session('update'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('update') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            @endif
+
+            <div class="row">
+                <div class="col-md-6">
+                    <a class="btn btn-outline-primary" href="{{ route('brands.create') }}" style="margin: 2rem;"> Brands </a>
+                </div>
+                <div class="col-md-6">
+                    <a class="btn btn-outline-primary" href="{{ route('home') }}" style="margin: 2rem; float: right;"> Home </a>
+                </div>
+            </div>
     </div>
     <div class="col-sm-8">
         <div class="max-w-7xl mx-auto sm:px-8 lg:px-8">
             <div class="card w-100" style="margin: auto;">
+                <div class="card-header text-center">
+                    <h4>Inventory Items</h4>
+                </div>
+                <div class="container" style="width: 100%; padding: 10px;">
+                    <div class="text-right">
+                        <form action="{{ route('items.create') }}" method="GET">
+                            <button type="submit" class='btn btn-primary' style="float: right;">Search</button>
+                            <input type="text" name="search" class="form-control" style="float: right; width: 13rem; margin-right: 7px;"/>
+                        </form>
+                    </div>
+                </div>
                 <div class="card-body">
-                    <table class="table table-striped table-hover">
+                    <table class="table table-striped table-hover table-bordered">
                         <thead>
                             <tr>
                                 <th scope="col">Item ID</th>
@@ -73,12 +99,6 @@
                 <div class="card-header text-center">
                     Add Item
                 </div>
-                @if ($errors->any())
-                <div class="alert alert-danger  fade show">
-                    {{ $errors->first() }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="width: 5px; height: 5px; float: right;"></button>
-                </div>
-                @endif
                 <div class="card-body">
                     <form method="POST" action="">
                         @csrf
