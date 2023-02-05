@@ -24,7 +24,7 @@
             @endif
             <div class="row">
                 <div class="col-md-6">
-                    <a class="btn btn-outline-primary" href="{{ route('home') }}" style="margin: 2rem;"> Home </a>
+                    <a class="btn btn-outline-primary" href="{{ url('/') }}" style="margin: 2rem;"> Home </a>
                 </div>
                 <div class="col-md-6">
                     <a class="btn btn-outline-primary" href="{{ route('items.create') }}" style="margin: 2rem; float: right;"> Inventory Items </a>
@@ -63,17 +63,17 @@
                                     <td>{{ $brand->BrandName }}</td>
                                     <td>{{ $brand->IsActive }}</td>
                                     <td class="text-center">
-                                            <a href="{{ route('brands.edit', $brand->BrandID) }}" class='btn btn-warning' style="margin-right: 10px;">
-                                                Edit
-                                            </a>
-                                            <form method="POST" action="{{ route('brands.destroy',$brand->BrandID) }}" style="display: inline;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type=submit class="btn btn-danger">
-                                                    Delete
-                                                </button>
-                                            </form>
-                                        </td>
+                                        <a href="{{ route('brands.edit', $brand->BrandID) }}" class='btn btn-warning' style="margin-right: 10px;">
+                                            Edit
+                                        </a>
+                                        <form method="POST" action="{{ route('brands.destroy',$brand->BrandID) }}" style="display: inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type=submit class="btn btn-danger">
+                                                Delete
+                                            </button>
+                                        </form>
+                                    </td>
                                 </tr>
                                 @endforeach
                         </tbody>
