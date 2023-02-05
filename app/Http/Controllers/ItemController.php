@@ -17,7 +17,7 @@ class ItemController extends Controller
     public function index(Request $request)
     {
         if(!empty($request->search)){
-            $last_id = tbl_item::max('BrandID')+1;
+            $last_id = tbl_item::max('ItemID')+1;
             $items = tbl_item::query()
             ->where('ItemID','like','%'.$request->search.'%')
             ->orwhere('ItemName','like','%'.$request->search.'%')->get();

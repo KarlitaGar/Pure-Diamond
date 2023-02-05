@@ -34,7 +34,7 @@
                     <a class="btn btn-outline-primary" href="{{ route('brands.create') }}" style="margin: 2rem;"> Brands </a>
                 </div>
                 <div class="col-md-6">
-                    <a class="btn btn-outline-primary" href="{{ route('home') }}" style="margin: 2rem; float: right;"> Home </a>
+                    <a class="btn btn-outline-primary" href="{{ url('/') }}" style="margin: 2rem; float: right;"> Home </a>
                 </div>
             </div>
     </div>
@@ -163,7 +163,7 @@
                                 </select>
                             </div>
                         </div>
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-primary" style="width: 100%;">
                                     {{ __('Add') }}
                                 </button>
                             </form>
