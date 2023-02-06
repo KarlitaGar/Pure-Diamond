@@ -10,7 +10,7 @@ class BrandController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
+     *@param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
@@ -19,8 +19,7 @@ class BrandController extends Controller
             $last_id = tbl_brand::max('BrandID')+1;
             $brands = tbl_brand::query()
             ->where('BrandName','like','%'.$request->search.'%')
-            ->orwhere('BrandID','like','%'.$request->search.'%')
-            ->orwhere('IsActive','like','%'.$request->search.'%')->paginate(5);
+            ->orwhere('BrandID','like','%'.$request->search.'%')->get();
             return view('brands.index', compact('last_id','brands'));
         }else{
             $last_id = tbl_brand::max('BrandID')+1;
@@ -31,17 +30,16 @@ class BrandController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
+     *@param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function create(Request $request)
     {
-        if(empty($request->search)){
+        if(!empty($request->search)){
             $last_id = tbl_brand::max('BrandID')+1;
             $brands = tbl_brand::query()
             ->where('BrandName','like','%'.$request->search.'%')
-            ->orwhere('BrandID','like','%'.$request->search.'%')
-            ->orwhere('IsActive','like','%'.$request->search.'%')->paginate(5);
+            ->orwhere('BrandID','like','%'.$request->search.'%')->get();
             return view('brands.index', compact('last_id', 'brands'));
         }else{
             $last_id = tbl_brand::max('BrandID')+1;
@@ -68,9 +66,11 @@ class BrandController extends Controller
             'unique' => 'Brand name already exists in the database.',
         ]);
 
-        tbl_brand::create([
+        tbl_brand::insert([
             'BrandName' => $request->BrandName,
-            'IsActive' => $request->IsActive
+            'IsActive' => $request->IsActive,
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
         ]);
 
         return redirect()->back()->with('success','New brand name has been added.');

@@ -10,9 +10,9 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             @endif
-            @if ($errors->any())
+            @if (session('error'))
                 <div class="alert alert-danger fade show">
-                    {{ $errors->first() }}
+                    {{ session('error') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="width: 5px; height: 5px; float: right;"></button>
                 </div>
             @endif

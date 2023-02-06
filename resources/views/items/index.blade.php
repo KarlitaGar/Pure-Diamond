@@ -100,7 +100,7 @@
                     Add Item
                 </div>
                 <div class="card-body">
-                    <form method="POST" action="">
+                    <form method="POST" action="{{ route('items.store') }}">
                         @csrf
                         <div class="mb-3 row">
                             <div class="col-sm">

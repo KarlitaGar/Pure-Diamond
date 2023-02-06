@@ -11,7 +11,7 @@ class ItemController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
+        * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
@@ -31,16 +31,18 @@ class ItemController extends Controller
      /**
      * Show the form for creating a new resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function create(Request $request)
     {
         if(!empty($request->search)){
             $last_id = tbl_item::max('ItemID')+1;
+            $brands = tbl_brand::all();
             $items = tbl_item::query()
             ->where('ItemName','like','%'.$request->search.'%')
-            ->orwhere('ItemID','like','%'.$request->search.'%')->paginate(5);
-            return view('items.index', compact('last_id', 'items'));
+            ->orwhere('ItemID','like','%'.$request->search.'%')->get();
+            return view('items.index', compact('last_id', 'items', 'brands'));
         }else{
             $last_id = tbl_item::max('ItemID')+1;
             $brands = tbl_brand::all();
