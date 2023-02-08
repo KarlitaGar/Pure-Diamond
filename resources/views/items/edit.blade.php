@@ -49,7 +49,7 @@
                                 <select name="BrandID" class="form-control" id="BrandID">
                                     @foreach($brands as $row)
                                     <option value="{{ $row->BrandID }}" {{ old('BrandID', $items->ItemID) == $row->BrandID ? 'selected' : '' }}>
-                                        {{ $row->BrandID }}
+                                        {{ $row->BrandName }}
                                     </option>
                                     @endforeach
                                 </select>
@@ -71,13 +71,19 @@
                                 <label for="IsActive" class="form-label">Active</label>
                                 <select name="IsActive" class="form-control" id="IsActive">
                                     <option value="{{ $items->IsActive == 'Yes' ? 'Yes' : 'No' }}" >{{ $items->IsActive }}</option>
-                                    <option value="{{ $items->IsActive == 'Yes' ? 'No' : 'Yes'  }}" >{{ $items->IsActive == 'Yes'?'No':'Yes' }}</option>
+                                    <option value="{{ $items->IsActive == 'Yes' ? 'No' : 'Yes' }}" >{{ $items->IsActive == 'Yes'?'No':'Yes' }}</option>
                                 </select>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary">
-                            {{ __('Update') }}
-                        </button>
+                        
+                        <div class="mb-3 row" style="margin-top: 5%;">
+                            <div class="col-sm">
+                                <a class="btn btn-outline-primary" href="{{ route('items.create') }}" style="width: 100%;"> Back </a>
+                            </div>
+                            <div class="col-sm" style="margin-left: 70%; width: 100%;">
+                                <button type="submit" class="btn btn-primary" > {{ __('Update') }} </button>
+                            </div>  
+                        </div>
                     </form>
                 </div>
             </div>

@@ -31,7 +31,7 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <a class="btn btn-outline-primary" href="{{ route('brands.create') }}" style="margin: 2rem;"> Brands </a>
+                    <a class="btn btn-outline-primary" href="{{ route('brands.create') }}" style="margin: 2rem; paddingTop: -10px;"> Brands </a>
                 </div>
                 <div class="col-md-6">
                     <a class="btn btn-outline-primary" href="{{ url('/') }}" style="margin: 2rem; float: right;"> Home </a>
@@ -127,6 +127,7 @@
                                     <option value="Pack/2s" {{ old('ItemUOM') == 'Pack/2s' ? 'selected' : '' }}>Pack/2s</option>
                                     <option value="Pack/24s" {{ old('ItemUOM') == 'Pack/24s' ? 'selected' : '' }}>Pack/24s</option>
                                     <option value="Box/10s" {{ old('ItemUOM') == 'Box/10s' ? 'selected' : '' }}>Box/10s</option>
+                                       
                                 </select>
                             </div>
                         </div>

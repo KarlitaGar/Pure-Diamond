@@ -16,21 +16,19 @@ class BrandController extends Controller
     public function index(Request $request)
     {
         if(!empty($request->search)){
-            $last_id = tbl_brand::max('BrandID')+1;
             $brands = tbl_brand::query()
             ->where('BrandName','like','%'.$request->search.'%')
             ->orwhere('BrandID','like','%'.$request->search.'%')->get();
-            return view('brands.index', compact('last_id','brands'));
+            return view('brands.index', compact('brands'));
         }else{
-            $last_id = tbl_brand::max('BrandID')+1;
             $brands = tbl_brand::all();
-            return view('brands.index', compact('last_id','brands'));
+            return view('brands.index', compact('brands'));
         }
     }
 
     /**
      * Show the form for creating a new resource.
-     *@param  \Illuminate\Http\Request  $request
+     *@param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function create(Request $request)
@@ -61,8 +59,7 @@ class BrandController extends Controller
             'IsActive' => 'required',
         ],
         [
-            'required' => 'All fields are required. Please ensure all fields are
-            completed.',
+            'required' => 'All fields are required. Please ensure all fields are completed.',
             'unique' => 'Brand name already exists in the database.',
         ]);
 
@@ -116,22 +113,32 @@ class BrandController extends Controller
     public function update(Request $request, $id)
     {
         $validate = $request->validate([
-            'BrandName' => 'required|unique:tbl_brands,BrandID,'.$id.',BrandID',
+            'BrandName' => 'required|unique:tbl_brands,BrandName,'.$id.',BrandID',
             'IsActive' => 'required',
         ],
         [
-            'required' => 'All fields are required. Please ensure all fields are
-            completed.',
+            'required' => 'All fields are required. Please ensure all fields are completed.',
             'unique' => 'Brand name already exists in the database.',
         ]);
+
+        $old_name = tbl_brand::where('BrandID', $id)->pluck('BrandName')[0];
+        $old_status = tbl_brand::where('BrandID', $id)->pluck('IsActive')[0];
 
         tbl_brand::where('BrandID',$id)->update([
             'BrandName' => $request->BrandName,
             'IsActive' => $request->IsActive,
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
         ]);
 
+        $update = $old_name !== $request->BrandName || $old_status !== $request->IsActive;
+
+        if($update == true){
+            return redirect()->route('brands.create')->with('success','Brand has been updated.');
+        }else{
+            return back();
+        }        
         
-        return redirect()->route('brands.create')->with('success','Brand has been updated.');
     }
 
 

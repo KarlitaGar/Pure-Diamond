@@ -11,20 +11,21 @@ class ItemController extends Controller
 {
     /**
      * Display a listing of the resource.
-        * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
         if(!empty($request->search)){
-            $last_id = tbl_item::max('ItemID')+1;
             $items = tbl_item::query()
             ->where('ItemID','like','%'.$request->search.'%')
-            ->orwhere('ItemName','like','%'.$request->search.'%')->get();
-            return view('items.index', compact('last_id','items'));
+            ->orwhere('ItemPrice','like','%'.$request->search.'%')
+            ->orwhere('ItemName','like','%'.$request->search.'%')
+            ->orwhere('IsActive','like','%'.$request->search.'%')->get();
+            return view('items.index', compact('items'));
         }else{
             $items = tbl_item::all();
-            return view('items.index', compact('last_id','items'));
+            return view('items.index', compact('items'));
         }
     }
 
@@ -41,8 +42,10 @@ class ItemController extends Controller
             $brands = tbl_brand::all();
             $items = tbl_item::query()
             ->where('ItemName','like','%'.$request->search.'%')
+            ->orwhere('ItemPrice','like','%'.$request->search.'%')
+            ->orwhere('IsActive','like','%'.$request->search.'%')
             ->orwhere('ItemID','like','%'.$request->search.'%')->get();
-            return view('items.index', compact('last_id', 'items', 'brands'));
+            return view('items.index', compact('last_id','brands', 'items'));
         }else{
             $last_id = tbl_item::max('ItemID')+1;
             $brands = tbl_brand::all();
@@ -128,7 +131,7 @@ class ItemController extends Controller
     public function update(Request $request, $id)
     {
         $validate = $request->validate([
-            'ItemName' => 'required|unique:tbl_items',
+            'ItemName' => 'required|unique:tbl_items,ItemName,'.$id.',ItemID',
             'ItemPrice' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
             'ItemUOM' => 'required',
             'BrandID' => 'required',
@@ -139,10 +142,12 @@ class ItemController extends Controller
         [
             'required' => 'All fields are required. Please ensure all fields are
             completed.',
-            'unique' => 'Inventory item name already exists in the database.',
+            'unique' => 'Inventory item already exists in the database.',
             'integer' => 'This field must be a whole number.',
-            'min' => 'This field must be at least 1.'
+            'min' => 'This field must be at least 1.',
         ]);
+
+        $old_name = tbl_item::where('ItemID', $id)->first()->toArray();
 
         tbl_item::where('ItemID',$id)->update([
             'ItemName' => $request->ItemName,
@@ -152,11 +157,62 @@ class ItemController extends Controller
             'MinStock' => $request->MinStock,
             'ReorderQty' => $request->ReorderQty,
             'IsActive' => $request->IsActive,
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
         ]);
 
+        $new_name = tbl_item::where('ItemID', $id)->first()->toArray();
+
+        $diff = array_diff($old_name, $new_name);
+
+        if ((isset($diff['ItemName']) ||
+            isset($diff['ItemPrice']) ||
+            isset($diff['ItemUOM']) ||
+            isset($diff['BrandID']) ||
+            isset($diff['MinStock']) ||
+            isset($diff['ReorderQty']) ||
+            isset($diff['IsActive']))) {
+            return redirect()->route('items.create')->with('update','Inventory has been updated.');
+        }else{
+            return back();
+        }
         return redirect()->route('items.create')->with('update','Inventory has been updated.');
+
+        // $old_name = tbl_item::where('ItemID', $id)->pluck('ItemName')[0];
+        // $old_price = tbl_item::where('ItemID', $id)->pluck('ItemPrice')[0];
+        // $old_itemuom = tbl_item::where('ItemID', $id)->pluck('ItemUOM')[0];
+        // $old_brandid = tbl_item::where('ItemID', $id)->pluck('BrandID')[0];
+        // $old_stock = tbl_item::where('ItemID', $id)->pluck('MinStock')[0];
+        // $old_qty = tbl_item::where('ItemID', $id)->pluck('ReorderQty')[0];
+        // $old_status = tbl_item::where('ItemID', $id)->pluck('IsActive')[0];
+        
+
+        // tbl_item::where('ItemID',$id)->update([
+        //     'ItemName' => $request->ItemName,
+        //     'ItemPrice' => $request->ItemPrice,
+        //     'ItemUOM' => $request->ItemUOM,
+        //     'BrandID' => $request->BrandID,
+        //     'MinStock' => $request->MinStock,
+        //     'ReorderQty' => $request->ReorderQty,
+        //     'IsActive' => $request->IsActive,
+        //     'created_at' => Carbon::now(),
+        //     'updated_at' => Carbon::now(),
+        // ]);
+
+        // // $new_name = tbl_item::where('ItemID', $id)->first()->toArray();
+
+        // $update = $old_name !== $request->BrandName || 
+        //         $old_price !== $request->ItemPrice|| 
+        //         $old_itemuom !== $request->ItemUOM || 
+        //         $old_brandid !== $request->BrandID || 
+        //         $old_stock !== $request->MinStock || 
+        //         $old_qty !== $request->ReorderQty || 
+        //         $old_status !== $request->IsActive;
+
+        // if($update == true){
+        //     return redirect()->route('items.create')->with('success','Brand has been updated.');
+        // }else{
+        //     return back();
+        // }      
+        
     }
     
 }

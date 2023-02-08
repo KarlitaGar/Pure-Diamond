@@ -28,7 +28,7 @@ Route::get('/', function () {
 
 
 Route::middleware([])->group(function () {
-    Route::get('/brands', [BrandController::class, 'index']);
+    Route::get('/brands', [BrandController::class, 'index'])->name('brands.index');
     Route::get('/brands', [BrandController::class, 'create'])->name('brands.create');
     Route::post('/brands', [BrandController::class, 'store'])->name('brands.store');
     Route::get('/brands/{id}', [BrandController::class, 'edit'])->name('brands.edit');

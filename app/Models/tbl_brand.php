@@ -12,6 +12,6 @@ class tbl_brand extends Model
 
     protected $fillable = [
         'BrandName',
-        'IsActive'
+        'IsActive',
     ];
 }
